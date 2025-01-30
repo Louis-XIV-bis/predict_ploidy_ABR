@@ -1,0 +1,6 @@
+vcf: '/shared/projects/yeast_neutral_model/vcf_analysis_scere/data/snp_fmissing0.01_filtered_repremoved_yeast_strains.vcf.gz'
+
+samples: 
+  - HTHESsf-D10
+  - sample-BCM-4932-OS-227
+  - 1-E12-S90

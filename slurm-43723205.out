@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=128000, mem_mib=122071, disk_mb=75757, disk_mib=72248, cpu_per_task=8, tasks=1, cpus_per_task=4
+Select jobs to execute...
+
+[Thu Jan 30 15:24:40 2025]
+rule get_DP_AD:
+    input: /shared/projects/yeast_neutral_model/vcf_analysis_scere/data/snp_fmissing0.01_filtered_repremoved_yeast_strains.vcf.gz
+    output: results/DP_AD_raw/sample-BCM-4932-OS-227_DP_AD.txt
+    log: logs/get_DP_AD_sample-BCM-4932-OS-227.stderr
+    jobid: 0
+    reason: Forced execution
+    wildcards: sample=sample-BCM-4932-OS-227
+    priority: 4
+    threads: 4
+    resources: mem_mb=128000, mem_mib=122071, disk_mb=75757, disk_mib=72248, tmpdir=/tmp, partition=long, account=yeast_neutral_model, cpu_per_task=8, slurm_partition=fast, tasks=1, cpus_per_task=4, jobname=get_DP_AD
+

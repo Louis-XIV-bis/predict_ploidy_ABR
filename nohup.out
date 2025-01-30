@@ -1,0 +1,59 @@
+Using profile slurm for setting default command line arguments.
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cluster nodes: 10
+Job stats:
+job                count
+---------------  -------
+all                    1
+bin_ABR                3
+compute_ABR            3
+filter_ABR             3
+get_DP_AD              3
+violin_plot_ABR        3
+zip_DP_AD              3
+total                 19
+
+Select jobs to execute...
+
+[Thu Jan 30 15:24:19 2025]
+rule get_DP_AD:
+    input: /shared/projects/yeast_neutral_model/vcf_analysis_scere/data/snp_fmissing0.01_filtered_repremoved_yeast_strains.vcf.gz
+    output: results/DP_AD_raw/1-E12-S90_DP_AD.txt
+    log: logs/get_DP_AD_1-E12-S90.stderr
+    jobid: 6
+    reason: Forced execution
+    wildcards: sample=1-E12-S90
+    priority: 4
+    threads: 4
+    resources: mem_mb=128000, mem_mib=122071, disk_mb=75757, disk_mib=72248, tmpdir=<TBD>, partition=long, account=yeast_neutral_model, cpu_per_task=8, slurm_partition=fast, tasks=1, cpus_per_task=4, jobname=get_DP_AD
+
+Submitted job 6 with external jobid 'Submitted batch job 43723203'.
+
+[Thu Jan 30 15:24:22 2025]
+rule get_DP_AD:
+    input: /shared/projects/yeast_neutral_model/vcf_analysis_scere/data/snp_fmissing0.01_filtered_repremoved_yeast_strains.vcf.gz
+    output: results/DP_AD_raw/HTHESsf-D10_DP_AD.txt
+    log: logs/get_DP_AD_HTHESsf-D10.stderr
+    jobid: 2
+    reason: Forced execution
+    wildcards: sample=HTHESsf-D10
+    priority: 4
+    threads: 4
+    resources: mem_mb=128000, mem_mib=122071, disk_mb=75757, disk_mib=72248, tmpdir=<TBD>, partition=long, account=yeast_neutral_model, cpu_per_task=8, slurm_partition=fast, tasks=1, cpus_per_task=4, jobname=get_DP_AD
+
+Submitted job 2 with external jobid 'Submitted batch job 43723204'.
+
+[Thu Jan 30 15:24:22 2025]
+rule get_DP_AD:
+    input: /shared/projects/yeast_neutral_model/vcf_analysis_scere/data/snp_fmissing0.01_filtered_repremoved_yeast_strains.vcf.gz
+    output: results/DP_AD_raw/sample-BCM-4932-OS-227_DP_AD.txt
+    log: logs/get_DP_AD_sample-BCM-4932-OS-227.stderr
+    jobid: 4
+    reason: Forced execution
+    wildcards: sample=sample-BCM-4932-OS-227
+    priority: 4
+    threads: 4
+    resources: mem_mb=128000, mem_mib=122071, disk_mb=75757, disk_mib=72248, tmpdir=<TBD>, partition=long, account=yeast_neutral_model, cpu_per_task=8, slurm_partition=fast, tasks=1, cpus_per_task=4, jobname=get_DP_AD
+
+Submitted job 4 with external jobid 'Submitted batch job 43723205'.
