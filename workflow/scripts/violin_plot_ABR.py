@@ -2,6 +2,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import sys
+import re 
+import ast 
 
 # Extract and flatten ABR values from the dataframe
 def extract_abr_values(df: pd.DataFrame) -> list:
@@ -15,16 +17,20 @@ def extract_abr_values(df: pd.DataFrame) -> list:
         list: List of ABR values.
     """
     abr_values = []
-    for abr in df['ABR']:
-        # Check if ABR is a string (list of values separated by commas)
-        if isinstance(abr, str):
-            abr_values.extend([float(x) for x in abr.split(',')])
-        elif pd.notna(abr):  # If ABR is a single float or non-null
-            abr_values.append(float(abr))
+    
+    # Convert ABR column from string to actual list
+    df["ABR"] = df["ABR"].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
+
+    for abr_list in df["ABR"]:
+        if isinstance(abr_list, list):  # Ensure it's a list
+            abr_values.extend([float(x) for x in abr_list])  # Append all float values
+        elif pd.notna(abr_list):  # If it's a single float value, append directly
+            abr_values.append(float(abr_list))
+
     return abr_values
 
 # Plot the violin plot of ABR values
-def plot_violin(abr_values: list, strain: str) -> None:
+def plot_violin(abr_values: list, path: str) -> None:
     """
     Create a violin plot for the given ABR values.
     
@@ -35,11 +41,13 @@ def plot_violin(abr_values: list, strain: str) -> None:
     sns.set(style="whitegrid")
     plt.figure(figsize=(8, 6))
     
+    strain = re.search(r"results/violin_plot_ABR/([^_]+)_ABR_filtered_violinPlot.png", path)
+ 
     # Create the violin plot
     sns.violinplot(data=abr_values)
     
     # Add labels and title
-    plt.title(f'{strain}')
+    plt.title(f'{strain.group(1)}')
     plt.xlabel('ABR')
     
     plt.savefig(path)
@@ -64,4 +72,7 @@ def main() -> None:
     abr_values = extract_abr_values(df)
     
     # Plot the violin plot with filtered ABR values
-    plot_violin(filtered_abr_values, output_file)
+    plot_violin(abr_values, output_file)
+    
+if __name__ == "__main__":
+    main()

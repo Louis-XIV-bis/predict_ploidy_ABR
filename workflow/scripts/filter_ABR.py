@@ -1,3 +1,6 @@
+import sys
+import pandas as pd
+
 def main() -> None:
     """
     Main function to load data, compute ABR, and save the updated dataset.
@@ -28,3 +31,6 @@ def main() -> None:
 
     # Save the updated dataset to a new file
     df.to_csv(output_file, sep='\t', index=False)
+  
+if __name__ == "__main__":
+    main()

@@ -2,3 +2,5 @@ results/**
 logs/**
 .snakemake
 .snakemake/**
+slurm-*
+nohup.out

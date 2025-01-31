@@ -88,6 +88,9 @@ def main() -> None:
     
     # Compute ABR and add it to the dataset
     df = compute_abr(df)
-    
+
     # Save the updated dataset to a new file
     df.to_csv(output_file, sep='\t', index=False)
+
+if __name__ == "__main__":
+    main()

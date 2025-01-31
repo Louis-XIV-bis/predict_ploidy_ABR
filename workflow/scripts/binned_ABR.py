@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import sys
-
+import ast
 
 def load_dataset(file_path: str) -> pd.DataFrame:
     """
@@ -20,7 +20,7 @@ def load_dataset(file_path: str) -> pd.DataFrame:
 
 def compute_binned_counts(df: pd.DataFrame, num_bins: int = 20) -> pd.DataFrame:
     """
-    Compute bin counts for ABR values and generate a binned summary for a given strain.
+    Compute bin counts for ABR values and generate a binned summary for a given     .
 
     Args:
         df (pd.DataFrame): Dataframe containing the 'ABR' column with lists of values.
@@ -35,22 +35,32 @@ def compute_binned_counts(df: pd.DataFrame, num_bins: int = 20) -> pd.DataFrame:
     # Create bin labels (intervals)
     bin_labels = [f"[{bin_edges[i]:.2f}-{bin_edges[i + 1]:.2f}]" for i in range(len(bin_edges) - 1)]
 
-    # Initialize a dictionary to store bin counts
+    # Initialize a dictionary for bin counts
     bin_counts = {label: 0 for label in bin_labels}
 
-    # Flatten ABR values and assign them to bins
-    for abr_list in df["ABR"]:
-        for abr_value in abr_list:  # Process each value in the ABR list
-            bin_index = np.digitize(abr_value, bin_edges, right=False) - 1  # Find bin index
-            if 0 <= bin_index < len(bin_labels):  # Ensure valid index
-                bin_counts[bin_labels[bin_index]] += 1  # Increment count in the correct bin
+    # Convert ABR column from string to actual list
+    df["ABR"] = df["ABR"].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
 
-    # Convert dictionary to a dataframe
+    # Iterate over each row in the DataFrame
+    for abr_list in df["ABR"]:
+        for abr_value in abr_list:  
+            # Find the bin index
+            bin_index = np.digitize(abr_value, bin_edges, right=False) - 1  
+            
+            # Ensure valid index
+            bin_index = min(bin_index, len(bin_labels) - 1)
+            
+            # Update bin count
+            bin_counts[bin_labels[bin_index]] += 1  
+
+    # Convert dictionary to a DataFrame
     binned_counts_df = pd.DataFrame([bin_counts])
 
+    print(binned_counts_df)
     return binned_counts_df
 
-def main() -> None:    """
+def main() -> None:
+    """
     Main function to load data, compute ABR, and save the updated dataset.
     """
     # Check for correct number of arguments
@@ -64,9 +74,12 @@ def main() -> None:    """
     
     # Load the dataset
     df = load_dataset(input_file)
-
+    print(df)
     # Compute binned counts for ABR values
-    binned_counts_df = compute_binned_counts(df, strain)
+    binned_counts_df = compute_binned_counts(df)
 
     # Save the final dataset to a new file
     binned_counts_df.to_csv(output_file, index=False)
+
+if __name__ == "__main__":
+    main()

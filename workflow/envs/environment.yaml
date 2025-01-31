@@ -1,4 +1,4 @@
-name: /shared/ifbstor1/projects/yeast_neutral_model/env_snakemake
+name: /shared/ifbstor1/projects/yeast_neutral_model/env_ABR
 channels:
   - conda-forge
   - bioconda
@@ -65,4 +65,4 @@ dependencies:
     - seaborn==0.13.2
     - six==1.17.0
     - tzdata==2025.1
-prefix: /shared/ifbstor1/projects/yeast_neutral_model/env_snakemake
+prefix: /shared/ifbstor1/projects/yeast_neutral_model/env_ABR

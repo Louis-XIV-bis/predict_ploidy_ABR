@@ -1,0 +1,149 @@
+
+# Query for both AD (Allele Depth) and DP (Depth of Coverage) for the specified sample in the vcf
+rule get_DP_AD:
+    priority: 4
+    input:
+        VCF,
+    output:
+        "results/DP_AD_raw/{sample}_DP_AD.txt", # TODO : remettre temp()
+    threads: resources["get_DP_AD"]["cpu_tasks"]
+    resources:
+        slurm_partition=resources["get_DP_AD"]["partition"],
+        mem_mb=resources["get_DP_AD"]["memory"],
+        tasks=resources["get_DP_AD"]["tasks"],
+        cpus_per_task=resources["get_DP_AD"]["cpu_tasks"],
+        jobname=resources["get_DP_AD"]["jobname"],
+    log:
+        stderr="logs/get_DP_AD_{sample}.stderr"
+    shell:
+        '''
+        echo -e "CHROM\tPOS\tREF\tALT\tDP\tAD" > {output}
+        bcftools query -f "%CHROM\t%POS\t%REF\t%ALT[\t%DP\t%AD]\n" -s {wildcards.sample} {input} >> {output} 2> {log.stderr}
+        ''' 
+
+# Zip the DP_AD files to store them efficiently
+rule zip_DP_AD:
+    priority: 8
+    input:
+        "results/DP_AD_raw/{sample}_DP_AD.txt",
+    output:
+        "results/DP_AD_gz/{sample}_DP_AD.txt.gz",
+    threads: resources["zip_DP_AD"]["cpu_tasks"]
+    resources:
+        slurm_partition=resources["zip_DP_AD"]["partition"],
+        mem_mb=resources["zip_DP_AD"]["memory"],
+        tasks=resources["zip_DP_AD"]["tasks"],
+        cpus_per_task=resources["zip_DP_AD"]["cpu_tasks"],
+        jobname=resources["zip_DP_AD"]["jobname"],
+    log:
+        stderr="logs/zip_DP_AD_{sample}.stderr"
+    shell:
+        '''
+        gzip -c --best {input} > {output} 2> {log.stderr}
+        ''' 
+
+# Compute allele balance ratio (ABR) for each sites in the file
+rule compute_ABR:
+    priority: 6
+    input:
+        "results/DP_AD_raw/{sample}_DP_AD.txt",
+    output:
+        "results/ABR_raw/{sample}_ABR.tsv", # TODO : remettre temp(
+    threads: resources["compute_ABR"]["cpu_tasks"]
+    resources:
+        slurm_partition=resources["compute_ABR"]["partition"],
+        mem_mb=resources["compute_ABR"]["memory"],
+        tasks=resources["compute_ABR"]["tasks"],
+        cpus_per_task=resources["compute_ABR"]["cpu_tasks"],
+        jobname=resources["compute_ABR"]["jobname"],
+    log:
+        stdout="logs/compute_ABR_{sample}.stdout", stderr="logs/compute_ABR_{sample}.stderr"
+    shell:
+        '''
+        python workflow/scripts/compute_ABR.py {input} {output} > {log.stdout} 2> {log.stderr}
+        ''' 
+
+# Filter sites with allele ABR not matching some assumptions
+rule filter_ABR:
+    priority: 6
+    input:
+        "results/ABR_raw/{sample}_ABR.tsv",
+    output:
+        "results/ABR_filtered/{sample}_ABR_filtered.tsv", # TODO : remettre temp()
+    threads: resources["filter_ABR"]["cpu_tasks"]
+    resources:
+        slurm_partition=resources["filter_ABR"]["partition"],
+        mem_mb=resources["filter_ABR"]["memory"],
+        tasks=resources["filter_ABR"]["tasks"],
+        cpus_per_task=resources["filter_ABR"]["cpu_tasks"],
+        jobname=resources["filter_ABR"]["jobname"],
+    log:
+        stdout="logs/filter_ABR_{sample}.stdout", stderr="logs/filter_ABR_{sample}.stderr"
+    shell:
+        '''
+        python workflow/scripts/filter_ABR.py {input} {output} > {log.stdout} 2> {log.stderr}
+        ''' 
+
+# Filter sites with allele ABR not matching some assumptions
+rule violin_plot_ABR:
+    priority: 6
+    input:
+        "results/ABR_filtered/{sample}_ABR_filtered.tsv",
+    output:
+        "results/violin_plot_ABR/{sample}_ABR_filtered_violinPlot.png",
+    threads: resources["violin_plot_ABR"]["cpu_tasks"]
+    resources:
+        slurm_partition=resources["violin_plot_ABR"]["partition"],
+        mem_mb=resources["violin_plot_ABR"]["memory"],
+        tasks=resources["violin_plot_ABR"]["tasks"],
+        cpus_per_task=resources["violin_plot_ABR"]["cpu_tasks"],
+        jobname=resources["violin_plot_ABR"]["jobname"],
+    log:
+        stdout="logs/violin_plot_ABR_{sample}.stdout", stderr="logs/violin_plot_ABR_{sample}.stderr"
+    shell:
+        '''
+        python workflow/scripts/violin_plot_ABR.py {input} {output} > {log.stdout} 2> {log.stderr}
+        ''' 
+
+# Store the ABR values into bins and reformat the data to be used for machine learning
+rule bin_ABR:
+    priority: 6
+    input:
+        "results/ABR_filtered/{sample}_ABR_filtered.tsv",
+    output:
+        "results/ABR_filtered_binned/{sample}_ABR_filtered_binned.csv",
+    threads: resources["bin_ABR"]["cpu_tasks"]
+    resources:
+        slurm_partition=resources["bin_ABR"]["partition"],
+        mem_mb=resources["bin_ABR"]["memory"],
+        tasks=resources["bin_ABR"]["tasks"],
+        cpus_per_task=resources["bin_ABR"]["cpu_tasks"],
+        jobname=resources["bin_ABR"]["jobname"],
+    log:
+        stdout="logs/binned_ABR_{sample}.stdout", stderr="logs/binned_ABR_{sample}.stderr"
+    shell:
+        '''
+        python workflow/scripts/binned_ABR.py {input} {output} > {log.stdout} 2> {log.stderr}
+        ''' 
+
+
+# Merge the ABR csv for each samples into a unique one 
+rule merge_ABR_csv:
+    priority: 8
+    input:
+        "results/ABR_filtered_binned/{sample}_ABR_filtered_binned.csv", 
+    output:
+        "results/merged_filtered_binned_ABR.csv",
+    threads: resources["merge_ABR_csv"]["cpu_tasks"]
+    resources:
+        slurm_partition=resources["merge_ABR_csv"]["partition"],
+        mem_mb=resources["merge_ABR_csv"]["memory"],
+        tasks=resources["merge_ABR_csv"]["tasks"],
+        cpus_per_task=resources["merge_ABR_csv"]["cpu_tasks"],
+        jobname=resources["merge_ABR_csv"]["jobname"],
+    log:
+        stderr="logs/merge_ABR_csv.stderr"
+    shell:
+        '''
+        (head -n 1 {input.tsv_files[0]} && tail -n +2 -q {input.tsv_files[1:]}) > {output} 2> {log.stderr}
+        ''' 
