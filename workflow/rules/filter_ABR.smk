@@ -4,7 +4,7 @@ rule filter_ABR:
     input:
         "results/ABR_raw/{sample}_ABR.tsv",
     output:
-        temp("results/ABR_filtered/{sample}_ABR_filtered.tsv"), 
+        "results/ABR_filtered/{sample}_ABR_filtered.tsv", 
     threads: resources["filter_ABR"]["cpu_tasks"]
     resources:
         slurm_partition=resources["filter_ABR"]["partition"],

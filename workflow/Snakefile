@@ -17,14 +17,15 @@ localrules:
 
 rule all:
     input:       
-        expand("results/DP_AD_gz/{sample}_DP_AD.txt.gz", sample=SAMPLES),
-        expand("results/violin_plot_ABR/{sample}_ABR_filtered_violinPlot.png", sample=SAMPLES),
+        expand("results/ABR_gz/{sample}_ABR.tsv.gz", sample=SAMPLES),
+        expand("results/hist_ABR/{sample}_ABR_filtered_hist.png", sample=SAMPLES),
         expand("results/ABR_filtered_binned/{sample}_ABR_filtered_binned.csv", sample=SAMPLES),
+        "results/merged_filtered_binned_ABR.csv",
 
 include: "rules/get_DP_AD.smk"
-include: "rules/zip_DP_AD.smk"
 include: "rules/compute_ABR.smk"
+include: "rules/zip_ABR.smk"
 include: "rules/filter_ABR.smk"
-include: "rules/violin_plot_ABR.smk"
+include: "rules/hist_plot_ABR.smk"
 include: "rules/bin_ABR.smk"
-include: "rules/merge_ABR_csv.smk"
+include: "rules/merge_ABR.smk"

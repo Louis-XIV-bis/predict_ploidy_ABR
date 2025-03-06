@@ -74,7 +74,7 @@ def main() -> None:
     
     # Load the dataset
     df = load_dataset(input_file)
-    print(df)
+
     # Compute binned counts for ABR values
     binned_counts_df = compute_binned_counts(df)
 

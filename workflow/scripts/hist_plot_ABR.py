@@ -29,28 +29,32 @@ def extract_abr_values(df: pd.DataFrame) -> list:
 
     return abr_values
 
-# Plot the violin plot of ABR values
-def plot_violin(abr_values: list, path: str) -> None:
+def plot_histogram(abr_values: list, path: str) -> None:
     """
-    Create a violin plot for the given ABR values.
+    Create a histogram for the given ABR values.
     
     Args:
         abr_values (list): List of ABR values to plot.
         path (str): Path to save the plot.
     """
     sns.set(style="whitegrid")
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(6, 4))
     
-    strain = re.search(r"results/violin_plot_ABR/([^_]+)_ABR_filtered_violinPlot.png", path)
- 
-    # Create the violin plot
-    sns.violinplot(data=abr_values)
-    
+    strain_match = re.search(r"results/hist_ABR/(.+)_ABR_filtered_hist\.png", path)
+    strain = strain_match.group(1)
+
+    # Create the histogram
+    sns.histplot(abr_values, bins=20, kde=False)
+    plt.xlim(0, 1)
+    plt.xticks([i * 0.1 for i in range(11)])  # Set x-axis ticks every 0.1
+
     # Add labels and title
-    plt.title(f'{strain.group(1)}')
-    plt.xlabel('ABR')
+    plt.title(strain)
+    plt.xlabel('Allele balance ratio (ABR)')
+    plt.ylabel('Count')
     
-    plt.savefig(path)
+    plt.savefig(path, bbox_inches='tight')
+    plt.close()
 
 def main() -> None:
     """
@@ -60,19 +64,18 @@ def main() -> None:
     if len(sys.argv) != 3:
         print("Usage: python filter_ABR.py <input_file> <output_file>")
         sys.exit(1)
-    
+
     # Define input and output paths
     input_file = sys.argv[1]
     output_file = sys.argv[2]
 
     # Load the dataset
-    df = pd.read_csv(input_file, sep="\t", low_memory=False)
+    df = pd.read_csv(input_file, sep='\t', low_memory=False)
 
     # Extract and flatten the ABR values
     abr_values = extract_abr_values(df)
     
     # Plot the violin plot with filtered ABR values
-    plot_violin(abr_values, output_file)
-    
+    plot_histogram(abr_values, output_file)
 if __name__ == "__main__":
     main()

@@ -5,19 +5,19 @@ get_DP_AD:
   cpu_tasks: 4
   jobname: get_DP_AD
 
-zip_DP_AD:
-  partition: fast
-  memory: 20000
-  tasks: 1
-  cpu_tasks: 4
-  jobname: zip_DP_AD
-
 compute_ABR:
   partition: fast
   memory: 20000
   tasks: 1
   cpu_tasks: 4
   jobname: compute_ABR
+
+zip_ABR:
+  partition: fast
+  memory: 20000
+  tasks: 1
+  cpu_tasks: 4
+  jobname: zip_DP_AD
 
 filter_ABR:
   partition: fast
@@ -26,7 +26,7 @@ filter_ABR:
   cpu_tasks: 4
   jobname: filter_ABR
 
-violin_plot_ABR:
+hist_plot_ABR:
   partition: fast
   memory: 20000
   tasks: 1
@@ -40,7 +40,7 @@ bin_ABR:
   cpu_tasks: 4
   jobname: bin_ABR
 
-merge_ABR_csv: 
+merge_ABR: 
   partition: fast
   memory: 20000
   tasks: 1

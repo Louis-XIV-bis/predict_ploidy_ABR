@@ -4,3 +4,4 @@ logs/**
 .snakemake/**
 slurm-*
 nohup.out
+/het_snp
