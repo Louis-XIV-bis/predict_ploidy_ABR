@@ -46,3 +46,10 @@ merge_ABR:
   tasks: 1
   cpu_tasks: 4
   jobname: merge_ABR_csv
+
+predict_ploidy: 
+  partition: fast
+  memory: 20000
+  tasks: 1
+  cpu_tasks: 4
+  jobname: predict_ploidy
