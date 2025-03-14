@@ -1,4 +1,4 @@
-Author: Louis OLLIVIER  
+Author: Louis OLLIVIER (code, prediction), Cintia Gómez-Muñoz (concept and ABR analysis)
 Mail: louis.xiv.bis@gmail.com
 
 # Snakemake Workflow: Ploidy Prediction
@@ -67,7 +67,7 @@ samples:
 If you have a lot of smaples and want to be sure to give the exact same names in the vcf you can get the list this way (and paste it to the config file): 
 
 ```
-bcftools query -l /path/to/vcf/samples.vcf.gz| sed 's/^/- /' > samples.txt
+bcftools query -l /path/to/vcf/samples.vcf.gz | sed 's/^/- /' > samples.txt
 ```
 
 Follow the correct section if you want to run the pipeline on a SLURM HPC cluster (recommended) or on a local computer.   
