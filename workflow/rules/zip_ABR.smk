@@ -16,5 +16,5 @@ rule zip_ABR:
         stderr="logs/zip_ABR_{sample}.stderr"
     shell:
         '''
-        gzip -c --best {input} > {output} 2> {log.stderr}
+        gzip -c --best "{input}" > "{output}" 2> "{log.stderr}"
         ''' 

@@ -43,20 +43,22 @@ def merge_csv_files(input_files: List[str], output_file: str) -> None:
 
 def main() -> None:
     """
-    Main function to merge multiple CSV files while ensuring only the first file retains its header,
-    and adds a 'strain' column derived from the file name.
+    Reads input CSV file paths from a file instead of command-line arguments to avoid argument list too long error.
     """
-    # Ensure correct number of arguments
-    if len(sys.argv) < 3:
-        print("Usage: python merge_ABR.py <input_file1> <input_file2> ... <output_file>")
+    if len(sys.argv) != 3:
+        print("Usage: python merge_ABR.py <input_files_list.txt> <output_file>")
         sys.exit(1)
-    
-    # Define input file list and output file path
-    input_files = sys.argv[1:-1]  # All arguments except the last one are input files
-    output_file = sys.argv[-1]  # Last argument is the output file
+
+    input_files_list = sys.argv[1]  # File containing list of input CSV paths
+    output_file = sys.argv[2]  # Output file
+
+    # Read file paths
+    with open(input_files_list, 'r') as f:
+        input_files = [line.strip() for line in f if line.strip()]  # Remove empty lines
 
     # Merge CSV files
     merge_csv_files(input_files, output_file)
+
 
 if __name__ == "__main__":
     main()

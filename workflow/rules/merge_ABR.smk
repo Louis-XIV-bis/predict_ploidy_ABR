@@ -5,6 +5,8 @@ rule merge_ABR:
         expand("results/ABR_filtered_binned/{sample}_ABR_filtered_binned.csv", sample=SAMPLES),
     output:
         "results/merged_filtered_binned_ABR.csv",
+    conda:
+        "../envs/environment.yaml"
     threads: resources["merge_ABR"]["cpu_tasks"]
     resources:
         slurm_partition=resources["merge_ABR"]["partition"],
@@ -16,5 +18,7 @@ rule merge_ABR:
         stdout="logs/merge_ABR.stdout",stderr="logs/merge_ABR.stderr"
     shell:
         '''
-        python workflow/scripts/merge_ABR.py {input} {output} > {log.stdout} 2> {log.stderr}
+        echo "{input}" | tr ' ' '\n' > input_files.txt;
+        python workflow/scripts/merge_ABR.py input_files.txt "{output}" > "{log.stdout}" 2> "{log.stderr}";
+        rm input_files.txt
         ''' 

@@ -16,5 +16,5 @@ rule predict_ploidy:
         stdout="logs/predict_ploidy.stdout",stderr="logs/predict_ploidy.stderr"
     shell:
         '''
-        python workflow/scripts/predict_ploidy.py {input} {output} > {log.stdout} 2> {log.stderr}
+        python workflow/scripts/predict_ploidy.py "{input}" "{output}" > "{log.stdout}" 2> "{log.stderr}"
         ''' 

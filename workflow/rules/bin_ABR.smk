@@ -5,6 +5,8 @@ rule bin_ABR:
         "results/ABR_filtered/{sample}_ABR_filtered.tsv",
     output:
         "results/ABR_filtered_binned/{sample}_ABR_filtered_binned.csv",
+    conda:
+        "../envs/environment.yaml"
     threads: resources["bin_ABR"]["cpu_tasks"]
     resources:
         slurm_partition=resources["bin_ABR"]["partition"],
@@ -16,5 +18,5 @@ rule bin_ABR:
         stdout="logs/binned_ABR_{sample}.stdout", stderr="logs/binned_ABR_{sample}.stderr"
     shell:
         '''
-        python workflow/scripts/binned_ABR.py {input} {output} > {log.stdout} 2> {log.stderr}
+        python workflow/scripts/binned_ABR.py "{input}" "{output}" > "{log.stdout}" 2> "{log.stderr}"
         ''' 

@@ -5,6 +5,8 @@ rule filter_ABR:
         "results/ABR_raw/{sample}_ABR.tsv",
     output:
         "results/ABR_filtered/{sample}_ABR_filtered.tsv", 
+    conda:
+        "../envs/environment.yaml"
     threads: resources["filter_ABR"]["cpu_tasks"]
     resources:
         slurm_partition=resources["filter_ABR"]["partition"],
@@ -16,5 +18,5 @@ rule filter_ABR:
         stdout="logs/filter_ABR_{sample}.stdout", stderr="logs/filter_ABR_{sample}.stderr"
     shell:
         '''
-        python workflow/scripts/filter_ABR.py {input} {output} > {log.stdout} 2> {log.stderr}
+        python workflow/scripts/filter_ABR.py "{input}" "{output}" > "{log.stdout}" 2> "{log.stderr}"
         ''' 
