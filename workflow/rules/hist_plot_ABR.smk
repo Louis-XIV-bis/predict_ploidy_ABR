@@ -6,7 +6,7 @@ rule hist_plot_ABR:
     output:
         "results/hist_ABR/{sample}_ABR_filtered_hist.png",
     conda:
-        "../envs/environment.yaml"
+        "../envs/python.yaml"
     threads: resources["hist_plot_ABR"]["cpu_tasks"]
     resources:
         slurm_partition=resources["hist_plot_ABR"]["partition"],

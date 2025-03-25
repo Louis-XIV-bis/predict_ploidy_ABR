@@ -6,7 +6,7 @@ rule compute_ABR:
     output:
         temp("results/ABR_raw/{sample}_ABR.tsv"),
     conda:
-        "../envs/environment.yaml"
+        "../envs/python.yaml"
     threads: resources["compute_ABR"]["cpu_tasks"]
     resources:
         slurm_partition=resources["compute_ABR"]["partition"],

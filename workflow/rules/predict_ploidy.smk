@@ -5,6 +5,8 @@ rule predict_ploidy:
         "results/merged_filtered_binned_ABR.csv",
     output:
         "results/ploidy_strain.csv",
+    conda: 
+        "../envs/python.yaml"
     threads: resources["predict_ploidy"]["cpu_tasks"]
     resources:
         slurm_partition=resources["predict_ploidy"]["partition"],

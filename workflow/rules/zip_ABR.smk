@@ -5,6 +5,8 @@ rule zip_ABR:
         "results/ABR_raw/{sample}_ABR.tsv",
     output:
         "results/ABR_gz/{sample}_ABR.tsv.gz",
+    conda: 
+        "../envs/bcftools_gzip.yaml"
     threads: resources["zip_ABR"]["cpu_tasks"]
     resources:
         slurm_partition=resources["zip_ABR"]["partition"],

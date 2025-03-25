@@ -6,7 +6,7 @@ rule merge_ABR:
     output:
         "results/merged_filtered_binned_ABR.csv",
     conda:
-        "../envs/environment.yaml"
+        "../envs/python.yaml"
     threads: resources["merge_ABR"]["cpu_tasks"]
     resources:
         slurm_partition=resources["merge_ABR"]["partition"],

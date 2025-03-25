@@ -6,7 +6,7 @@ rule get_DP_AD:
     output:
         temp("results/DP_AD_raw/{sample}_DP_AD.txt"),
     conda:
-        "../envs/environment.yaml"
+        "../envs/bcftools_gzip.yaml"
     threads: resources["get_DP_AD"]["cpu_tasks"]
     resources:
         slurm_partition=resources["get_DP_AD"]["partition"],

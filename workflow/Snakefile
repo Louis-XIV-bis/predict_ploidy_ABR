@@ -21,7 +21,7 @@ rule all:
         expand("results/hist_ABR/{sample}_ABR_filtered_hist.png", sample=SAMPLES),
         expand("results/ABR_filtered_binned/{sample}_ABR_filtered_binned.csv", sample=SAMPLES),
         "results/merged_filtered_binned_ABR.csv",
-        "results/ploidy_strain.csv",
+        # "results/ploidy_strain.csv",
 
 
 include: "rules/get_DP_AD.smk"
@@ -31,4 +31,4 @@ include: "rules/filter_ABR.smk"
 include: "rules/hist_plot_ABR.smk"
 include: "rules/bin_ABR.smk"
 include: "rules/merge_ABR.smk"
-include: "rules/predict_ploidy.smk"
+# include: "rules/predict_ploidy.smk"
