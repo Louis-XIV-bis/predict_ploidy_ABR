@@ -4,28 +4,26 @@ import sys
 import sklearn
 import os
 
-# Load trained model and scaler
+# Load trained model with scaler (Pipeline())
 MODEL_PATH = "workflow/scripts/model/ploidy_prediction_model.pkl"
-SCALER_PATH = "workflow/scripts/model/scaler.pkl"
 
-def load_model_and_scaler(model_path, scaler_path):
+def load_model_with_scaler(model_path):
     """
     Load the trained Random Forest model and StandardScaler.
 
     Args:
-        model_path (str): Path to the trained model file.
-        scaler_path (str): Path to the scaler file.
+        model_path (str): Path to the trained model file. Contains a pipeline with scaler and model
 
     Returns:
-        tuple: Loaded model and scaler.
+        Loaded model.
     """
-    if not os.path.exists(model_path) or not os.path.exists(scaler_path):
+    if not os.path.exists(model_path):
         print(model_path)
-        sys.exit("Error: Model or scaler file not found. Train the model first.")
+        sys.exit("Error: Model w/ scaler file not found. Train the model first.")
 
     model = joblib.load(model_path)
-    scaler = joblib.load(scaler_path)
-    return model, scaler
+
+    return model
 
 def load_and_check_data(csv_file, expected_features):
     """
@@ -61,13 +59,12 @@ def load_and_check_data(csv_file, expected_features):
 
     return data
 
-def predict_new_data(model, scaler, new_data, expected_features):
+def predict_new_data(model, new_data, expected_features):
     """
     Scale the input data and make predictions using the trained model.
 
     Args:
         model: Trained RandomForestClassifier model.
-        scaler: Fitted StandardScaler.
         new_data (pd.DataFrame): Data to predict on.
         expected_features (list): List of required features.
 
@@ -80,11 +77,8 @@ def predict_new_data(model, scaler, new_data, expected_features):
     # Select only feature columns for prediction
     feature_data = new_data[expected_features]
 
-    # Scale feature data
-    feature_data_scaled = scaler.transform(feature_data)
-
     # Predict
-    predictions = model.predict(feature_data_scaled)
+    predictions = model.predict(feature_data)
 
     # Create a results DataFrame
     results = pd.DataFrame({
@@ -113,14 +107,14 @@ def main():
         "[0.60-0.65]","[0.65-0.70]","[0.70-0.75]","[0.75-0.80]",
         "[0.80-0.85]","[0.85-0.90]","[0.90-0.95]","[0.95-1.00]"]
 
-    # Load model and scaler
-    model, scaler = load_model_and_scaler(MODEL_PATH, SCALER_PATH)
+    # Load model with scaler (pipeline)
+    model = load_model_and_scaler(MODEL_PATH)
 
     # Load and validate input data
     new_data = load_and_check_data(csv_file, expected_features + ["strain"])  # Keep "strain" column if present
     print(new_data)
     # Make predictions
-    results = predict_new_data(model, scaler, new_data, expected_features)
+    results = predict_new_data(model, new_data, expected_features)
 
     # Save predictions to CSV
     results.to_csv(output_file, index=False)

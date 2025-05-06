@@ -1,4 +1,4 @@
-name: /shared/ifbstor1/projects/yeast_neutral_model/predict_ploidy_ABR/results/env_python
+name: /shared/ifbstor1/projects/yeast_neutral_model/predict_ploidy_ABR/env_python
 channels:
   - conda-forge
   - bioconda
@@ -48,4 +48,4 @@ dependencies:
     - threadpoolctl==3.6.0
     - typing==3.7.4.3
     - tzdata==2025.2
-prefix: /shared/ifbstor1/projects/yeast_neutral_model/predict_ploidy_ABR/results/env_python
+prefix: /shared/ifbstor1/projects/yeast_neutral_model/predict_ploidy_ABR/env_python
