@@ -5,7 +5,7 @@ Mail: louis.xiv.bis@gmail.com
 
 This repository contains a Snakemake workflow for predicting ploidy levels from allele balance ratio (ABR) data. The workflow processes VCF files, computes ABR values, filters and bins the data, and uses a trained machine learning model to predict ploidy levels for various yeast strains.
 
-Note: the model is trained on *Saccharmocyces cerevisiae* to predict the following classes : 1n-2n_homozygous, 2n_heterozygous, 3n, 4n, 5n. If you want to use it for another organism, you may need to train another model (using the pipeline to generate the ABR dataset for training). 
+Note: the model is trained on *Saccharmocyces cerevisiae* to predict the following classes : 1n-2n_homozygous, 2n_heterozygous, 3n, 4n, 5n. If you want to use it for another organism, you may need to train another model (using the pipeline to generate the ABR dataset for training features). 
 
 ## Workflow Overview
 
@@ -18,7 +18,7 @@ The workflow consists of the following main steps:
 5. **Merge ABR**: Merges the binned ABR values from multiple samples into a single file.
 6. **Predict Ploidy**: Uses a trained machine learning model to predict ploidy levels from the binned ABR data.
 7. **Plot Histograms**: Generates histograms of the ABR values for visualization.
-
+8. **Predict Ploidy**: Predict the ploidy using the model in **/scripts/model**.
 
 
 ## Usage 
