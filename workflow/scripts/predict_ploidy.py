@@ -108,11 +108,12 @@ def main():
         "[0.80-0.85]","[0.85-0.90]","[0.90-0.95]","[0.95-1.00]"]
 
     # Load model with scaler (pipeline)
-    model = load_model_and_scaler(MODEL_PATH)
+    model = load_model_with_scaler(MODEL_PATH)
 
     # Load and validate input data
     new_data = load_and_check_data(csv_file, expected_features + ["strain"])  # Keep "strain" column if present
     print(new_data)
+    
     # Make predictions
     results = predict_new_data(model, new_data, expected_features)
 

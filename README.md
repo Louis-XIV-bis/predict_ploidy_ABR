@@ -20,6 +20,7 @@ The workflow consists of the following main steps:
 7. **Plot Histograms**: Generates histograms of the ABR values for visualization.
 8. **Predict Ploidy**: Predict the ploidy using the model in **/scripts/model**.
 
+Note: for the predicting model, you may want to generate the data first, train your own model and replace the one in the folder to add for instance new classes. The model is a basic random forest classifier. 
 
 ## Usage 
 ### System requirements
@@ -64,7 +65,7 @@ samples:
   - HN2.2
   # Add more samples as needed
 ```
-If you have a lot of smaples and want to be sure to give the exact same names in the vcf you can get the list this way (and paste it to the config file): 
+If you have a lot of samples and want to be sure to give the exact same names in the vcf you can get the list this way (and paste it to the config file): 
 
 ```
 bcftools query -l /path/to/vcf/samples.vcf.gz | sed 's/^/- /' > samples.txt
