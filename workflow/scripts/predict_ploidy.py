@@ -7,7 +7,7 @@ import os
 # Load trained model with scaler (Pipeline())
 MODEL_PATH = "workflow/scripts/model/ploidy_prediction_model.pkl"
 
-def load_model_with_scaler(model_path):
+def load_model(model_path):
     """
     Load the trained Random Forest model and StandardScaler.
 
@@ -28,7 +28,6 @@ def load_model_with_scaler(model_path):
 def load_and_check_data(csv_file, expected_features):
     """
     Load new data from a CSV file and ensure it contains the required features.
-    Normalize the counts into proportions.
 
     Args:
         csv_file (str): Path to the CSV file containing new data.
@@ -52,10 +51,6 @@ def load_and_check_data(csv_file, expected_features):
     
     # Exclude the 'strain' (or other specified in main()) column from numeric columns
     numeric_columns = data.select_dtypes(include='number').columns 
-    
-    # Normalize counts into proportions
-    row_sums = data[numeric_columns].sum(axis=1)
-    data[numeric_columns] = data[numeric_columns].div(row_sums, axis=0).fillna(0)  # Replace NaN with 0
 
     return data
 
@@ -108,7 +103,7 @@ def main():
         "[0.80-0.85]","[0.85-0.90]","[0.90-0.95]","[0.95-1.00]"]
 
     # Load model with scaler (pipeline)
-    model = load_model_with_scaler(MODEL_PATH)
+    model = load_model(MODEL_PATH)
 
     # Load and validate input data
     new_data = load_and_check_data(csv_file, expected_features + ["strain"])  # Keep "strain" column if present
